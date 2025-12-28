@@ -1,15 +1,16 @@
 <?php
-session_start();
+session_start(); // iniciar sesión para usar mensajes flash
 
-// Autocarga simple de clases
+// Autocarga de clases automática
 spl_autoload_register(function ($class) {
     $paths = [
-        'controllers/',
-        'models/',
-        'config/',
-        'helpers/'
+        'controllers/', // controladores
+        'models/',      // modelos
+        'config/',      // configuraciones
+        'helpers/'      // helpers (FlashMessages, Validator)
     ];
 
+    // Buscar y cargar archivo de clase
     foreach ($paths as $path) {
         $file = __DIR__ . '/' . $path . $class . '.php';
         if (file_exists($file)) {
@@ -19,20 +20,20 @@ spl_autoload_register(function ($class) {
     }
 });
 
-require_once 'Router.php';
+require_once 'Router.php'; // cargar Router personalizado
 
-$router = new Router();
+$router = new Router(); // crear instancia del router
 
-/* Rutes */
-$router->get('/', 'HomeController@index');
+/* Rutas de la aplicación */
+$router->get('/', 'HomeController@index'); // página principal
 
-$router->get('/tasques', 'TaskController@index');
-$router->get('/tasques/create', 'TaskController@create');
-$router->post('/tasques', 'TaskController@store');
+$router->get('/tasques', 'TaskController@index'); // listado de tareas
+$router->get('/tasques/create', 'TaskController@create'); // formulario crear
+$router->post('/tasques', 'TaskController@store'); // procesar creación
 
-$router->get('/tasques/{id}/edit', 'TaskController@edit');
-$router->post('/tasques/{id}', 'TaskController@update');
-$router->post('/tasques/{id}/delete', 'TaskController@delete');
+$router->get('/tasques/{id}/edit', 'TaskController@edit'); // formulario editar
+$router->post('/tasques/{id}', 'TaskController@update'); // procesar actualización
+$router->post('/tasques/{id}/delete', 'TaskController@delete'); // eliminar tarea
 
-/* Executar router */
+/* Ejecutar router según la URL */
 $router->dispatch();
